@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+
+!/usr/bin/env python
 #Install the tweepy library with 'pip install tweepy' - install pip first!
 import tweepy
 import os.path
@@ -34,10 +35,11 @@ leaking = ['is sinking',
            'is leaking']
 
 
+########################################################
+########################################################
 #You shouldnt need to make any changes after this point#
-#######################################################
-#######################################################
-#######################################################
+########################################################
+########################################################
 
 #This section sets up the authentication into twitter
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -52,26 +54,50 @@ else:
     lastquoteid = "0"
 
 #Creates the link to the tweet
-baseurl = "https://twitter.com/" + userdispname + "/status/"
+#baseurl = "https://twitter.com/" + userdispname + "/status/"
 
 #Gets the last tweet, ignoring retweets and replies 
 #lasttweet = api.user_timeline(screen_name = userdispname, count = 1, include_rts = False, exclude_replies = True)
 
-search = api.search(q = query, rpp = 100, since_id = lastid, results_type = recent, include_rts = False, exclude_replies = False)
+search = api.search(q = query, rpp = 100, since_id = lastquoteid, results_type = 'recent', include_rts = False, exclude_replies = False)
 
 
 #And now the logic and the update/post
-for stuff in lasttweet:
-    lastid = str(stuff.id)
-    if lastquoteid == lastid:
-        break
-    else:
-        try:
-            quoteurl = baseurl + lastid
-            response = " " + comment + " %s " % quoteurl
-            s = api.update_status(response)
-            f = open('./lastquoteid.txt', 'w')
-            f.write(lastid)
-            f.close()
-        except tweepy.TweepError as e:
-            break
+#for stuff in lasttweet:
+#    lastid = str(stuff.id)
+#    if lastquoteid == lastid:
+#        break
+#    else:
+#        try:
+#            quoteurl = baseurl + lastid
+#            response = " " + comment + " %s " % quoteurl
+#            s = api.update_status(response)
+#            f = open('./lastquoteid.txt', 'w')
+#            f.write(lastid)
+#            f.close()
+#        except tweepy.TweepError as e:
+#            break
+
+for s in search:
+    print s.id
+    for i in aircraft:
+        print "processing aircraft"
+        if i == s.text.lower():
+            screen_name = s.user.screen_name
+            response = "@%s Helicopters are aircraft" % screen_name
+            #s = api.update_status(response, s.id)
+            print response
+    for i in jets:
+        print "process jets"
+        if i == s.text.lower():
+            screen_name = s.user.screen_name
+            response = "@%s The F35 testing begins this year" % screen_name
+            #s = api.update_status(response, s.id)
+            print response
+    for i in leaking:
+        print "processing leaking"
+        if i == s.text.lower():
+            screen_name = s.user.screen_name
+            response = "@%s This is what sea trials are for, issues will be fixed!" % screen_name
+            #s = api.update_status(response, s.id)
+            print response
