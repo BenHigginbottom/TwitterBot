@@ -21,10 +21,13 @@ query = "Queen Elizabeth OR Aircraft Carrier"
 #Filters to make sure we get the the right tweets
 aircraft = ['no aircraft',
             'without aircraft',
+            'aircraftless',
+            'planeless',
             'no planes',
             'without planes']
 
 jets = ['no jets',
+        'jetless',
         'without jets']
 
 leaking = ['is sinking',
