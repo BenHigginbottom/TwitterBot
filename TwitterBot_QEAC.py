@@ -54,7 +54,7 @@ else:
     lastquoteid = "0"
 
 #Search Twitter
-search = api.search(q = query, count = 100, include_rts = False, exclude_replies = False)
+search = api.search(q = query, count = 100, since_id = lastquoteid, include_rts = False, exclude_replies = False)
 
 
 #And now the logic and the update/post
