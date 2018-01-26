@@ -17,7 +17,7 @@ ACCESS_TOKEN_SECRET = "ACCESS_TOKEN_SECRET"
 #comment = "SET ME TO THE COMMENT"
 
 #Search Terms
-query = "Queen Elizabeth OR Aircraft Carrier"
+query = "Queen Elizabeth OR Aircraft Carrier AND jet OR aircraft OR leak OR sink"
 
 #Filters to make sure we get the the right tweets
 aircraft = ['no aircraft',
@@ -53,13 +53,8 @@ if os.path.isfile('./lastquoteid.txt'):
 else:
     lastquoteid = "0"
 
-#Creates the link to the tweet
-#baseurl = "https://twitter.com/" + userdispname + "/status/"
-
-#Gets the last tweet, ignoring retweets and replies 
-#lasttweet = api.user_timeline(screen_name = userdispname, count = 1, include_rts = False, exclude_replies = True)
-
-search = api.search(q = query, rpp = 100, since_id = lastquoteid, results_type = 'recent', include_rts = False, exclude_replies = False)
+#Search Twitter
+search = api.search(q = query, count = 100, include_rts = False, exclude_replies = False)
 
 
 #And now the logic and the update/post
@@ -79,25 +74,18 @@ search = api.search(q = query, rpp = 100, since_id = lastquoteid, results_type =
 #            break
 
 for s in search:
-    print s.id
-    for i in aircraft:
-        print "processing aircraft"
-        if i == s.text.lower():
+    for a in aircraft:
+        if a in s.text:
             screen_name = s.user.screen_name
             response = "@%s Helicopters are aircraft" % screen_name
-            #s = api.update_status(response, s.id)
-            print response
-    for i in jets:
-        print "process jets"
-        if i == s.text.lower():
+            s = api.update_status(response, s.id)
+    for j in jets:
+        if j in s.text:
             screen_name = s.user.screen_name
-            response = "@%s The F35 testing begins this year" % screen_name
-            #s = api.update_status(response, s.id)
-            print response
-    for i in leaking:
-        print "processing leaking"
-        if i == s.text.lower():
+            response = "@%s The F35 testing begins later this year" % screen_name
+            s = api.update_status(response, s.id)
+    for l in leaking:
+        if l in s.text:
             screen_name = s.user.screen_name
-            response = "@%s This is what sea trials are for, issues will be fixed!" % screen_name
-            #s = api.update_status(response, s.id)
-            print response
+            response = "@%s This is what sea trials are for, issues will be found and fixed!" % screen_name
+            s = api.update_status(response, s.id)
